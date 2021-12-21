@@ -1,0 +1,137 @@
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+
+<style>
+  body {
+    font-size: 1.3rem;
+  }
+  .container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .card {
+    padding: 2px;
+    border: 1px dashed rgb(252, 113, 113);
+    width: 200px;
+    height: 100px;
+    font-family: sans-serif;
+
+    display: flex;
+    flex-direction: column;
+  }
+  .name {
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  .name .male {
+    background: rgb(3, 3, 187);
+    color: rgb(248, 230, 230);
+    padding: 0 2px;
+  }
+
+  .name .female {
+    background: rgb(187, 3, 126);
+    color: rgb(248, 230, 230);
+    padding: 0 2px;
+  }
+
+  .name .first {
+
+  }
+  .name .last {
+    font-size: 80%;
+  }
+
+  .baggagebox {
+    font-size: 60%;
+  }
+
+  .attendance {
+    border: 1px dashed rgb(181, 181, 231);
+
+    display: flex;
+    flex-direction: column; 
+    justify-content: flex-end;
+  }
+
+  .attendance-label {
+    font-size: 50%;
+    text-align: right;
+  }
+
+  .filled:after {
+    content: '✔️'
+  }
+
+  .not-filled:after {
+    content: '❌'
+  }
+
+  .all-weeks {
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: row;
+  }
+
+  .weekbox {
+    font-size: .7rem;
+    border: 1px solid rgb(80, 79, 79);
+    width: 1rem;
+    height: 1rem;
+    text-align: center;
+  }
+</style>
+
+<div id="app" class="container">
+  <div v-for="(person, index) in people">
+    <div class="card" v-if="index >= 0 && index <= 23">
+      <span class="name">
+        <span class="first">{{ person.firstName }}</span> <span v-bind:class="{ 'last female': person[`Identifying Gender`] == `Female`, 'last male': person[`Identifying Gender`] == `Male` }" >{{ person.lastName }}</span>
+      </span>
+      <span v-if="person.IsPartnered != 'SOLO'">
+        <span class="baggagebox">
+          with
+          {{ person["Partner/Baggage"] }}
+        </span>
+      </span>
+
+      <div class="attendance">
+        <div class="attendance-label">attendance</div>
+        <div class="all-weeks">
+          <div class="weekbox">
+            <span v-if="person[`October 27`] == `Week 1`" class="filled"></span>
+            <span v-if="person[`October 27`] != `Week 1`" class="not-filled"></span>
+          </div>
+          <div class="weekbox">
+            <span v-if="person[`November 3`] == `Week 2`" class="filled"></span>
+            <span v-if="person[`November 3`] != `Week 2`" class="not-filled"></span>
+          </div>
+          <div class="weekbox">
+            <span v-if="person[`November 10`] == `Week 3`" class="filled"></span>
+            <span v-if="person[`November 10`] != `Week 3`" class="not-filled"></span>
+          </div>
+          <div class="weekbox">
+            <span v-if="person[`November 17`] == `Week 4`" class="filled"></span>
+            <span v-if="person[`November 17`] != `Week 4`" class="not-filled"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript" src="roster.js"></script>
+<script type="text/javascript">
+var app = new Vue({
+  el: '#app',
+  data: {
+    message: 'Hello Vue!',
+    people: ROSTER.map(p => {
+      p.firstName = p.Name.split(" ")[0];
+      p.lastName = p.Name.replace(`${p.firstName} `, "");
+      return p;
+    })
+  }
+})
+</script>
