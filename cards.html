@@ -85,13 +85,13 @@
 
 <div id="app" class="container">
   <div v-for="(person, index) in people">
-    <div class="card" v-if="index >= 0 && index <= 23">
+    <div class="card">
       <span class="name">
         <span class="first">{{ person.firstName }}</span> <span v-bind:class="{ 'last female': person[`Identifying Gender`] == `Female`, 'last male': person[`Identifying Gender`] == `Male` }" >{{ person.lastName }}</span>
       </span>
       <span v-if="person.IsPartnered != 'SOLO'">
         <span class="baggagebox">
-          with
+          Baggage Preference: <br />
           {{ person["Partner/Baggage"] }}
         </span>
       </span>
@@ -99,29 +99,14 @@
       <div class="attendance">
         <div class="attendance-label">attendance</div>
         <div class="all-weeks">
-          <div class="weekbox">
-            <span v-if="person[`October 27`] == `Week 1`" class="filled"></span>
-            <span v-if="person[`October 27`] != `Week 1`" class="not-filled"></span>
-          </div>
-          <div class="weekbox">
-            <span v-if="person[`November 3`] == `Week 2`" class="filled"></span>
-            <span v-if="person[`November 3`] != `Week 2`" class="not-filled"></span>
-          </div>
-          <div class="weekbox">
-            <span v-if="person[`November 10`] == `Week 3`" class="filled"></span>
-            <span v-if="person[`November 10`] != `Week 3`" class="not-filled"></span>
-          </div>
-          <div class="weekbox">
-            <span v-if="person[`November 17`] == `Week 4`" class="filled"></span>
-            <span v-if="person[`November 17`] != `Week 4`" class="not-filled"></span>
-          </div>
+          {{ person.Attendance }}
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<script type="text/javascript" src="roster.js"></script>
+<script type="text/javascript" src="captains.js"></script>
 <script type="text/javascript">
 var app = new Vue({
   el: '#app',
@@ -130,6 +115,8 @@ var app = new Vue({
     people: ROSTER.map(p => {
       p.firstName = p.Name.split(" ")[0];
       p.lastName = p.Name.replace(`${p.firstName} `, "");
+      p.IsPartnered = p.Baggage == '' ? 'SOLO' : 'PARTNER';
+      p["Partner/Baggage"] = p.Baggage;
       return p;
     })
   }
